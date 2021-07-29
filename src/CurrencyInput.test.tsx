@@ -7,13 +7,13 @@ test('sets and formats currency', () => {
 
   render(<CurrencyInput
     name="test"
-    value={'$0.00'}
+    value={0}
     setValue={setValue}
   />)
 
   const currencyValueInput = screen.getByLabelText('Amount:')
 
-  fireEvent.change(currencyValueInput, { target: { value: '4' } })
+  fireEvent.change(currencyValueInput, { target: { value: '$4,064.32' } })
 
-  expect(setValue).toBeCalledWith('$4.00')
+  expect(setValue).toBeCalledWith(4064.32)
 })

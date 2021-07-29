@@ -8,14 +8,14 @@ test('converts values to yearly state', () => {
   render(<PeriodicCurrencyInput
     name={'test'}
     initialPeriod={Periods.monthly}
-    yearlyValue={'$0.00'}
+    yearlyValue={0}
     setYearlyAmount={setYearlyValue}
   />)
 
   const budgetInput = screen.getByLabelText('Amount:')
-  fireEvent.change(budgetInput, { target: { value: '5' } })
+  fireEvent.change(budgetInput, { target: { value: '$5.32' } })
 
-  expect(setYearlyValue).toBeCalledWith('$60.00')
+  expect(setYearlyValue).toBeCalledWith(63.84)
 })
 
 test('converts values to yearly state from other periods', () => {
@@ -24,15 +24,15 @@ test('converts values to yearly state from other periods', () => {
   render(<PeriodicCurrencyInput
     name={'test'}
     initialPeriod={Periods.monthly}
-    yearlyValue={'$0.00'}
+    yearlyValue={0}
     setYearlyAmount={setYearlyValue}
   />)
 
   const budgetInput = screen.getByLabelText('Amount:')
-  fireEvent.change(budgetInput, { target: { value: '5' } })
+  fireEvent.change(budgetInput, { target: { value: '$5.64' } })
 
   const budgetPeriodInput = screen.getByLabelText('Period:')
   fireEvent.change(budgetPeriodInput, { target: { value: 'weekly' } })
 
-  expect(setYearlyValue).toBeCalledWith('$260.00')
+  expect(setYearlyValue).toBeCalledWith(293.28)
 })

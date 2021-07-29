@@ -1,14 +1,18 @@
-import React, { Dispatch, SetStateAction } from 'react'
+import React, { Dispatch, SetStateAction, useState } from 'react'
+import { numberToPercent, percentToNumber } from './Formatter'
 
 export const RateInput = (
   { name, value, setValue }:
   {
     name: string,
-    value: string,
-    setValue: Dispatch<SetStateAction<string>>
+    value: number,
+    setValue: Dispatch<SetStateAction<number>>
   }) => {
-  const handleValueChange = (value: string) => {
-    setValue(value)
+  const [amount, setAmount] = useState(numberToPercent(value))
+
+  const handleAmountChange = (amount: string) => {
+    setAmount(amount)
+    setValue(percentToNumber(amount))
   }
 
   return <>
@@ -16,9 +20,9 @@ export const RateInput = (
     <label>
       Rate:
       <input
-        type='text'
-        value={value}
-        onChange={(e) => handleValueChange(e.target.value)}
+          type='text'
+          value={amount}
+          onChange={(e) => handleAmountChange(e.target.value)}
       />
     </label>
   </>

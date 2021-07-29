@@ -6,7 +6,7 @@ dayjs.extend(duration)
 dayjs.extend(relativeTime)
 
 export const USDToNumber = (USD: string) =>
-  parseFloat(USD.replaceAll(/[$,]/g, ''))
+  parseFloat(USD.replace(/[$,]/g, ''))
 
 export const numberToUSD = (number: number) =>
   number.toLocaleString('en-US', {

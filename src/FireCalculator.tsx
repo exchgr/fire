@@ -3,18 +3,18 @@ import './FireCalculator.css'
 import { PeriodicCurrencyInput, Periods } from './PeriodicCurrencyInput'
 import { CurrencyInput } from './CurrencyInput'
 import { RateInput } from './RateInput'
-import { numberToDuration, numberToUSD, percentToNumber, USDToNumber } from './Formatter'
+import { numberToDuration, numberToUSD } from './Formatter'
 
 const monthlyContribution = (netIncomeYearlyValue: number, budgetYearlyValue: number) =>
   (netIncomeYearlyValue - budgetYearlyValue) / 12
 
 function FireCalculator () {
-  const [expensesBeforeYearlyValue, setExpensesBeforeYearlyValue] = useState('$0.00')
-  const [expensesAfterYearlyValue, setExpensesAfterYearlyValue] = useState('$0.00')
-  const [netIncomeYearlyValue, setNetIncomeYearlyValue] = useState('$0.00')
-  const [currentSavings, setCurrentSavings] = useState('$0.00')
-  const [withdrawalRate, setWithdrawalRate] = useState('4%')
-  const [annualPercentageYield, setAnnualPercentageYield] = useState('7%')
+  const [expensesBeforeYearlyValue, setExpensesBeforeYearlyValue] = useState(0)
+  const [expensesAfterYearlyValue, setExpensesAfterYearlyValue] = useState(0)
+  const [netIncomeYearlyValue, setNetIncomeYearlyValue] = useState(0)
+  const [currentSavings, setCurrentSavings] = useState(0)
+  const [withdrawalRate, setWithdrawalRate] = useState(0.04)
+  const [annualPercentageYield, setAnnualPercentageYield] = useState(0.07)
 
   return (
     <>
@@ -24,48 +24,73 @@ function FireCalculator () {
           name='Expenses Before Retirement'
           initialPeriod={Periods.monthly}
           yearlyValue={expensesBeforeYearlyValue}
-          setYearlyAmount={setExpensesBeforeYearlyValue}/>
+          setYearlyAmount={setExpensesBeforeYearlyValue}
+        />
+
         <PeriodicCurrencyInput
-            name='Expenses After Retirement'
-            initialPeriod={Periods.monthly}
-            yearlyValue={expensesAfterYearlyValue}
-            setYearlyAmount={setExpensesAfterYearlyValue}/>
+          name='Expenses After Retirement'
+          initialPeriod={Periods.monthly}
+          yearlyValue={expensesAfterYearlyValue}
+          setYearlyAmount={setExpensesAfterYearlyValue}
+        />
+
         <PeriodicCurrencyInput
           name='Net Income'
           initialPeriod={Periods.bimonthly}
           yearlyValue={netIncomeYearlyValue}
-          setYearlyAmount={setNetIncomeYearlyValue} />
+          setYearlyAmount={setNetIncomeYearlyValue}
+        />
+
         <CurrencyInput
           name="Current Savings"
           value={currentSavings}
-          setValue={setCurrentSavings} />
+          setValue={setCurrentSavings}
+        />
+
         <RateInput
           name="Withdrawal Rate"
           value={withdrawalRate}
           setValue={setWithdrawalRate}
         />
+
         <RateInput
           name="Annual Percentage Yield"
           value={annualPercentageYield}
           setValue={setAnnualPercentageYield}
         />
+
         <h2>Total savings needed</h2>
-        {numberToUSD(totalSavingsNeeded(USDToNumber(expensesAfterYearlyValue), percentToNumber(withdrawalRate)))}
+        {numberToUSD(totalSavingsNeeded(
+          expensesAfterYearlyValue,
+          withdrawalRate
+        ))}
+
         <h2>Remaining savings needed</h2>
         {numberToUSD(remainingSavingsNeeded(
-          USDToNumber(expensesAfterYearlyValue),
-          percentToNumber(withdrawalRate),
-          USDToNumber(currentSavings)
+          expensesAfterYearlyValue,
+          withdrawalRate,
+          currentSavings
         ))}
+
         <h2>Monthly contribution</h2>
-        {numberToUSD(monthlyContribution(USDToNumber(netIncomeYearlyValue), USDToNumber(expensesBeforeYearlyValue)))}
+        {numberToUSD(monthlyContribution(
+          netIncomeYearlyValue,
+          expensesBeforeYearlyValue
+        ))}
+
         <h2>Time to retire</h2>
         {numberToDuration(timeToRetire(
-          totalSavingsNeeded(USDToNumber(expensesAfterYearlyValue), percentToNumber(withdrawalRate)),
-          USDToNumber(currentSavings),
-          percentToNumber(annualPercentageYield),
-          monthlyContribution(USDToNumber(netIncomeYearlyValue), USDToNumber(expensesAfterYearlyValue)),
-          12
+          totalSavingsNeeded(
+            expensesAfterYearlyValue,
+            withdrawalRate
+          ),
+          currentSavings,
+          annualPercentageYield,
+          monthlyContribution(
+            netIncomeYearlyValue,
+            expensesAfterYearlyValue
+          ),
+          12 // TODO: make a form field for this
         ))}
       </form>
     </>

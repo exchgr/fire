@@ -7,13 +7,13 @@ test('sets and formats the rate', () => {
 
   render(<RateInput
     name="test"
-    value={'4%'}
+    value={0.04}
     setValue={setValue}
   />)
 
   const currencyValueInput = screen.getByLabelText('Rate:')
 
-  fireEvent.change(currencyValueInput, { target: { value: '5' } })
+  fireEvent.change(currencyValueInput, { target: { value: '5%' } })
 
-  expect(setValue).toBeCalledWith('5%')
+  expect(setValue).toBeCalledWith(0.05)
 })

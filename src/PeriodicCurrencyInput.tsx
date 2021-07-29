@@ -41,24 +41,24 @@ export const PeriodicCurrencyInput = (
   { name, initialPeriod, yearlyValue, setYearlyAmount }: {
     name: string,
     initialPeriod: Periods,
-    yearlyValue: string,
-    setYearlyAmount: Dispatch<SetStateAction<string>>
+    yearlyValue: number,
+    setYearlyAmount: Dispatch<SetStateAction<number>>
   }
 ) => {
-  const [amount, setAmount] = useState('$0.00')
+  const [amount, setAmount] = useState(numberToUSD(yearlyValue / periodYearlyConversionFactor[initialPeriod]))
   const [period, setPeriod] = useState(initialPeriod)
 
   const handleAmountChange = (amount: string) => {
     setAmount(amount)
     setYearlyAmount(
-      numberToUSD(USDToNumber(amount) * periodYearlyConversionFactor[period])
+      USDToNumber(amount) * periodYearlyConversionFactor[period]
     )
   }
 
   const handlePeriodChange = (period: Periods) => {
     setPeriod(period)
     setYearlyAmount(
-      numberToUSD(USDToNumber(amount) * periodYearlyConversionFactor[period])
+      USDToNumber(amount) * periodYearlyConversionFactor[period]
     )
   }
 
@@ -88,15 +88,15 @@ export const PeriodicCurrencyInput = (
         >
           {Object
             .keys(Periods)
-            .map((budgetPeriod) =>
-              <option key={budgetPeriod} value={budgetPeriod}>
-                {periodLabel(Periods[budgetPeriod as keyof typeof Periods])}
+            .map((period) =>
+              <option key={period} value={period}>
+                {periodLabel(Periods[period as keyof typeof Periods])}
               </option>
             )
           }
         </select>
       </label>
     </div>
-    Yearly {name}: {yearlyValue}
+    Yearly {name}: {numberToUSD(yearlyValue)}
   </>
 }
